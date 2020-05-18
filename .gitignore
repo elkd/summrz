@@ -3,4 +3,11 @@
 .ipynb_checkpoints/
 abstractive-text-summarization-Copy1.ipynb
 venv_summrz/
+stanford*/
+stanford*
+cnndm*/
+cnndm*
+embedding-data/
+cloud_data/
+
 

@@ -1,5 +1,6 @@
 .vector_cache/
 .gitignore/
+__pycache__/
 .ipynb_checkpoints/
 abstractive-text-summarization-Copy1.ipynb
 venv_summrz/
@@ -8,6 +9,6 @@ stanford*
 cnndm*/
 cnndm*
 embedding-data/
-data/
+dataset/
 results/
 

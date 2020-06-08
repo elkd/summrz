@@ -12,5 +12,8 @@ embedding-data/
 dataset/
 results/
 cld_data/
-
-
+*.pt
+*.txt
+input/
+pre_data/
+logs/

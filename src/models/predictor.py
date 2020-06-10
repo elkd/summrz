@@ -9,8 +9,8 @@ import torch
 
 from tensorboardX import SummaryWriter
 
-from others.utils import rouge_results_to_str, test_rouge, tile
-from translate.beam import GNMTGlobalScorer
+from src.utils.utils import rouge_results_to_str, test_rouge, tile
+from src.translate.beam import GNMTGlobalScorer
 
 
 def build_predictor(args, tokenizer, symbols, model, logger=None):
@@ -23,7 +23,6 @@ def build_predictor(args, tokenizer, symbols, model, logger=None):
 class Translator(object):
     """
     Uses a model to translate a batch of sentences.
-
 
     Args:
        model (:obj:`onmt.modules.NMTModel`):

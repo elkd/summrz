@@ -14,14 +14,14 @@ import time
 import torch
 from pytorch_transformers import BertTokenizer
 
-import distributed
-from models import data_loader, model_builder
-from models.data_loader import load_dataset
-from models.loss import abs_loss
-from models.model_builder import AbsSummarizer
-from models.predictor import build_predictor
-from models.trainer import build_trainer
-from others.logging import logger, init_logger
+from src import distributed
+from src.models import data_loader, model_builder
+from src.models.data_loader import load_dataset
+from src.models.loss import abs_loss
+from src.models.model_builder import AbsSummarizer
+from src.models.predictor import build_predictor
+from src.models.trainer import build_trainer
+from src.utils.logging import logger, init_logger
 
 model_flags = ['hidden_size', 'ff_size', 'heads', 'emb_size', 'enc_layers', 'enc_hidden_size', 'enc_ff_size',
                'dec_layers', 'dec_hidden_size', 'dec_ff_size', 'encoder', 'ff_actv', 'use_interval']
@@ -225,7 +225,6 @@ def test_abs(args, device_id, pt, step):
     predictor.translate(test_iter, step)
 
 
-
 def baseline(args, cal_lead=False, cal_oracle=False):
     test_iter = data_loader.Dataloader(args, load_dataset(args, 'test', shuffle=False),
                                        args.batch_size, 'cpu',
@@ -307,9 +306,7 @@ def train_abs_single(args, device_id):
     trainer.train(train_iter_fct, args.train_steps)
 
 
-
-
-def test_text_abs(args):
+def test_text_abs(args, text_src):
 
     logger.info('Loading checkpoint from %s' % args.test_from)
     device = "cpu" if args.visible_gpus == '-1' else "cuda"
@@ -319,12 +316,11 @@ def test_text_abs(args):
     for k in opt.keys():
         if (k in model_flags):
             setattr(args, k, opt[k])
-    print(args)
 
     model = AbsSummarizer(args, device, checkpoint)
     model.eval()
 
-    test_iter = data_loader.load_text(args, args.text_src, args.text_tgt, device)
+    test_iter = data_loader.load_text(args, text_src, device)
 
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True, cache_dir=args.temp_dir)
     symbols = {'BOS': tokenizer.vocab['[unused0]'], 'EOS': tokenizer.vocab['[unused1]'],

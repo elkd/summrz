@@ -6,8 +6,7 @@ import random
 import torch
 from tqdm import tqdm
 
-from others.logging import logger
-
+from src.utils.logging import logger
 
 
 class Batch(object):
@@ -187,11 +186,6 @@ class DataIterator(object):
         xs = self.dataset
         return xs
 
-
-
-
-
-
     def preprocess(self, ex, is_test):
         src = ex['src']
         tgt = ex['tgt'][:self.args.max_tgt_len][:-1]+[2]
@@ -289,13 +283,12 @@ class DataIterator(object):
             return
 
 
-
-def load_text(args, source_fp, target_fp, device):
+def load_text(args, source_fp, device):
     from others.tokenization import BertTokenizer
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
     sep_vid = tokenizer.vocab['[SEP]']
     cls_vid = tokenizer.vocab['[CLS]']
-    n_lines = len(open(source_fp).read().split('\n'))
+    #n_lines = len(open(source_fp).read().split('\n'))
 
     def _process_src(raw):
         raw = raw.strip().lower()
@@ -324,41 +317,24 @@ def load_text(args, source_fp, target_fp, device):
 
         return src, mask_src, segments_ids, clss, mask_cls
 
-    if(target_fp==''):
-        with open(source_fp) as source:
-            for x in tqdm(source, total=n_lines):
-                src, mask_src, segments_ids, clss, mask_cls = _process_src(x)
-                segs = torch.tensor(segments_ids)[None, :].to(device)
-                batch = Batch()
-                batch.src  = src
-                batch.tgt  = None
-                batch.mask_src  = mask_src
-                batch.mask_tgt  = None
-                batch.segs  = segs
-                batch.src_str  =  [[sent.replace('[SEP]','').strip() for sent in x.split('[CLS]')]]
-                batch.tgt_str  = ['']
-                batch.clss  = clss
-                batch.mask_cls  = mask_cls
+    #In case the input text is from the file in the disk 
+    #with open(source_fp) as source:
 
-                batch.batch_size=1
-                yield batch
-    else:
-        with open(source_fp) as source, open(target_fp) as target:
-            for x, y in tqdm(zip(source, target), total=n_lines):
-                x = x.strip()
-                y = y.strip()
-                y = ' '.join(y.split())
-                src, mask_src, segments_ids, clss, mask_cls = _process_src(x)
-                segs = torch.tensor(segments_ids)[None, :].to(device)
-                batch = Batch()
-                batch.src  = src
-                batch.tgt  = None
-                batch.mask_src  = mask_src
-                batch.mask_tgt  = None
-                batch.segs  = segs
-                batch.src_str  =  [[sent.replace('[SEP]','').strip() for sent in x.split('[CLS]')]]
-                batch.tgt_str  = [y]
-                batch.clss  = clss
-                batch.mask_cls  = mask_cls
-                batch.batch_size=1
-                yield batch
+    paragraph = source.replace('\n', ' ').replace('\r', '').strip()
+    if not paragraph:
+        return None
+    src, mask_src, segments_ids, clss, mask_cls = _process_src(paragraph)
+    segs = torch.tensor(segments_ids)[None, :].to(device)
+    batch = Batch()
+    batch.src  = src
+    batch.tgt  = None
+    batch.mask_src  = mask_src
+    batch.mask_tgt  = None
+    batch.segs  = segs
+    batch.src_str  =  [[sent.replace('[SEP]','').strip() for sent in x.split('[CLS]')]]
+    batch.tgt_str  = ['']
+    batch.clss  = clss
+    batch.mask_cls  = mask_cls
+
+    batch.batch_size=1
+    yield batch

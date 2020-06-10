@@ -4,10 +4,10 @@ import numpy as np
 import torch
 from tensorboardX import SummaryWriter
 
-import distributed
-from models.reporter import ReportMgr, Statistics
-from others.logging import logger
-from others.utils import test_rouge, rouge_results_to_str
+import src.distributed
+from src.models.reporter import ReportMgr, Statistics
+from src.utils.logging import logger
+from src.utils.utils import test_rouge, rouge_results_to_str
 
 
 def _tally_parameters(model):

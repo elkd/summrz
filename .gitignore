@@ -17,3 +17,4 @@ cld_data/
 input/
 pre_data/
 logs/
+*sqlite3*

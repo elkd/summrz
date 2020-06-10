@@ -3,7 +3,6 @@
     https://github.com/pytorch/fairseq
 """
 
-
 from __future__ import print_function
 
 import math
@@ -11,7 +10,7 @@ import pickle
 
 import torch.distributed
 
-from others.logging import logger
+from src.utils.logging import logger
 
 
 def is_master(gpu_ranks, device_id):
@@ -37,7 +36,6 @@ def multi_init(device_id, world_size,gpu_ranks):
 def all_reduce_and_rescale_tensors(tensors, rescale_denom,
                                    buffer_size=10485760):
     """All-reduce and rescale tensors in chunks of the specified size.
-
     Args:
         tensors: list of Tensors to all-reduce
         rescale_denom: denominator for rescaling summed Tensors

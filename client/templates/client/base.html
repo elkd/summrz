@@ -32,7 +32,9 @@
         }
 
         .nav-logo {
-            width: 40px;
+            width: 35px;
+            border-radius: 10px;
+            padding-right; 10px;
         }
 
         .home-page-list {
@@ -41,15 +43,15 @@
         }
 
         h3 {
-            color: #007bff;
+            color: #e4e718;
         }
 
         #collapsibleNavbar {
-            background-color: #007bff;
+            background-color: #e4e718;
         }
 
         .navbar {
-            height: 45px;
+            height: 65px;
         }
 
         .nav-item {
@@ -60,7 +62,7 @@
         }
 
         .navbar-text {
-            color: #ffffff !important;
+            color: #1a180e !important;
         }
 
         .nav-list:hover, .nav-list:focus {
@@ -88,6 +90,13 @@
             padding: 0;
         }
 
+        .navbar {
+            background-color: #e4e718;
+        }
+
+        .btn {
+            background-color: #1a180e;
+
     </style>
 </head>
 
@@ -95,20 +104,18 @@
 
 <div class="row">
 
-    <nav class="navbar navbar-expand-sm bg-primary navbar-dark fixed-top">
+    <nav class="navbar navbar-expand-sm navbar-dark fixed-top">
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand mb-0 h1 navbar-text" href="/"><img class="nav-logo"
-              src="{% static 'images/logo.png' %}"
-              alt="ATS">Automatic Text Summarizer</a>
+        <a class="navbar-brand mb-0 h1 navbar-text" href="/">Automatic Text Summarizer</a>
 
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
             <ul class="navbar-nav">
                 <div class="nav-list">
                     <li class="nav-item home-page-list"><a class="nav-link navbar-text"
-                                                           href="{% url 'file_form_upload' %} ">Summarize
+                       href="{% url 'file_form_upload' %} ">Summarize
                         PDF</a></li>
                 </div>
             </ul>
@@ -118,7 +125,7 @@
 
                 <div class="navbar-nav dropdown ml-auto">
 
-                    <button class="btn btn-primary dropdown-toggle" type="button" id="navbarDropdown"
+                    <button class="btn dropdown-toggle" type="button" id="navbarDropdown"
                             data-toggle="dropdown">Welcome, <b
                             style="text-transform: uppercase;">{{ user.username }} </b>
                         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
@@ -130,7 +137,7 @@
                 </div>
             {% else %}
                 <ul class="navbar-nav ml-auto">
-                    <a type="button" class="btn btn-primary" data-toggle="modal" href="#login-page">Sign In
+                    <a type="button" class="btn" data-toggle="modal" href="#login-page">Sign In
                     </a>
                 </ul>
 
@@ -171,7 +178,6 @@
 
 <script src="{% static 'js/helper.min.js' %}" type="text/javascript"> </script>
 <script src="{% static 'js/functions.min.js' %}" type="text/javascript" ></script>
-<script src="{% static 'js/map.js' %}" type="text/javascript" ></script>
 <script src="{% static 'js/main.js' %}" type="text/javascript" ></script>
 
 <script src="vendor/jquery/jquery-3.2.1.min.js"></script>

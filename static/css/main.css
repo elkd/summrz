@@ -40,7 +40,7 @@ a {
 	font-family: Poppins-Regular;
 	font-size: 14px;
 	line-height: 1.7;
-	color: #666666;
+	color: #fff;
 	margin: 0px;
 	transition: all 0.4s;
 	-webkit-transition: all 0.4s;
@@ -195,7 +195,7 @@ iframe {
   background-size: cover;
   background-position: center;
 
-  padding: 64px 15px 64px 15px;
+  padding: 30px 15px 40px 15px;
 }
 
 .contact100-form-title-1 {
@@ -241,7 +241,7 @@ iframe {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  padding: 43px 88px 57px 190px;
+  padding: 20px 35px 30px 115px;
 }
 
 
@@ -369,12 +369,12 @@ textarea.input100 {
   padding: 0 20px;
   min-width: 160px;
   height: 50px;
-  background-color: #57b846;
+  background-color: #e4e718;
   border-radius: 25px;
 
   font-family: Poppins-Regular;
   font-size: 16px;
-  color: #fff;
+  color: #1a180e;
   line-height: 1.2;
 
   -webkit-transition: all 0.4s;
@@ -495,4 +495,6 @@ textarea.input100 {
   }
 }
 
-
+.results-cont {
+    margin-top : -18px;
+}

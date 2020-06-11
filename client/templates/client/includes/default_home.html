@@ -6,6 +6,9 @@
         align-items: center;
         text-align: center;
     }
+    .white-bg {
+        color: #1a180e;
+    }
 
 </style>
 
@@ -15,15 +18,16 @@
 
     <ul>
         <li class="home-page-list">
-            <h4>Summarize Text From Paragraph/URL</h4>
+            <h6>Start to summarize by inputing your text on the left or provide the URL
+            and the summary will appear here...</h6>
         </li>
         <li class="home-page-list">
-            <h4>Save Summarized Text</h4>
+            <h6>You can Save Summarized Text or Summarize PDF to Text File</h6>
         </li>
         <li class="home-page-list">
-            <h4>Summarize PDF to Text File</h4>
+            <h6> This website uses pretrained encoder and transformer decoder for summarization</h6>
         </li>
-        <a href="{% url 'about' %}" > Learn more </a>
+        <a href="{% url 'about' %}" class="white-bg"  > Learn more </a>
     </ul>
 
 </div>

@@ -178,6 +178,7 @@ iframe {
 
 /*==================================================================
 [ Title form ]*/
+
 .contact100-form-title {
   width: 100%;
   position: relative;
@@ -197,6 +198,28 @@ iframe {
 
   padding: 30px 15px 40px 15px;
 }
+
+
+.login100-form-title {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+
+  padding: 70px 15px 80px 15px;
+}
+
 
 .contact100-form-title-1 {
   font-family: Poppins-Bold;
@@ -354,8 +377,12 @@ textarea.input100 {
   display: -moz-box;
   display: -ms-flexbox;
   display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
   flex-wrap: wrap;
   padding-top: 8px;
+
 }
 
 .contact100-form-btn {

@@ -1,5 +1,15 @@
 {% extends "client/base.html" %}
 {% load static %}
+
+
+{% block navbar %}
+<ul class="navbar-nav ml-auto">
+    <a type="button" class="btn" data-toggle="modal" href="{% url 'login' %}">Login
+    </a>
+</ul>
+
+{% endblock navbar %}
+
 {% block index %}
 
     <div class="row">

@@ -19,3 +19,4 @@ pre_data/
 logs/
 *sqlite3*
 temp/
+events.out.*

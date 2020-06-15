@@ -123,28 +123,18 @@ class Translator(object):
                   data_iter, step,
                   attn_debug=False):
 
+        summary = ''
         self.model.eval()
-        gold_path = self.args.result_path + '.%d.gold' % step
-        can_path = self.args.result_path + '.%d.candidate' % step
-        self.gold_out_file = codecs.open(gold_path, 'w', 'utf-8')
-        self.can_out_file = codecs.open(can_path, 'w', 'utf-8')
-
-        # raw_gold_path = self.args.result_path + '.%d.raw_gold' % step
-        # raw_can_path = self.args.result_path + '.%d.raw_candidate' % step
-        self.gold_out_file = codecs.open(gold_path, 'w', 'utf-8')
-        self.can_out_file = codecs.open(can_path, 'w', 'utf-8')
-
-        raw_src_path = self.args.result_path + '.%d.raw_src' % step
-        self.src_out_file = codecs.open(raw_src_path, 'w', 'utf-8')
-
-        # pred_results, gold_results = [], []
+        #When not using the web, these lines should be uncommented
+        #In this case the output will go to files
+        #the code is in the root folder models, same file name predictor.py
         ct = 0
         with torch.no_grad():
             for batch in data_iter:
                 if(self.args.recall_eval):
                     gold_tgt_len = batch.tgt.size(1)
-                    # self.min_length = gold_tgt_len + 20
-                    # self.max_length = gold_tgt_len + 60
+                    self.min_length = gold_tgt_len + 20
+                    self.max_length = gold_tgt_len + 60
                     self.min_length = gold_tgt_len + 10
                     self.max_length = gold_tgt_len + 20
                 batch_data = self.translate_batch(batch)
@@ -152,35 +142,30 @@ class Translator(object):
 
                 for trans in translations:
                     pred, gold, src = trans
-                    pred_str = pred.replace('[unused0]', '').replace('[unused3]', '').replace('[PAD]', '').replace('[unused1]', '').replace(r' +', ' ').replace(' [unused2] ', '<q>').replace('[unused2]', '').strip()
+                    pred_str = pred.replace('[unused0]', '').replace(
+                            '[unused3]', '').replace(
+                                '[PAD]', '').replace(
+                                    '[unused1]', '').replace(
+                                        r' +', ' ').replace(
+                                            ' [unused2] ', ' ').replace(
+                                                '[unused2]', '').strip()
+
                     gold_str = gold.strip()
                     if(self.args.recall_eval):
-                        # _pred_str = ''
-                        # for sent in pred_str.split('<q>'):
-                        #     can_pred_str = _pred_str+ '<q>'+sent.strip()
-                        #     can_gap = math.fabs(len(_pred_str.split())-len(gold_str.split()))
-                        #     # if(can_gap>=gap):
-                        #     if(len(can_pred_str.split())>=len(gold_str.split())+10):
-                        #         pred_str = _pred_str
-                        #         break
-                        #     else:
-                        #         _pred_str = can_pred_str
+                         _pred_str = ''
+                         gap = 1e3
+                         for sent in pred_str.split('<q>'):
+                             can_pred_str = _pred_str+ '<q>'+sent.strip()
+                             can_gap = math.fabs(len(_pred_str.split())-len(gold_str.split()))
+                             #if(can_gap>=gap):
+                             if(len(can_pred_str.split())>=len(gold_str.split())+10):
+                                 pred_str = _pred_str
+                                 break
+                             else:
+                                 _pred_str = can_pred_str
 
-
-
-                        pred_str = ' '.join(pred_str.split()[:len(gold_str.split())])
-
-                    self.can_out_file.write(pred_str + '\n')
-                    self.gold_out_file.write(gold_str + '\n')
-                    self.src_out_file.write(src.strip() + '\n')
+                    summary = pred_str
                     ct += 1
-                self.can_out_file.flush()
-                self.gold_out_file.flush()
-                self.src_out_file.flush()
-
-        self.can_out_file.close()
-        self.gold_out_file.close()
-        self.src_out_file.close()
 
         if (step != -1):
             rouges = self._report_rouge(gold_path, can_path)
@@ -189,6 +174,9 @@ class Translator(object):
                 self.tensorboard_writer.add_scalar('test/rouge1-F', rouges['rouge_1_f_score'], step)
                 self.tensorboard_writer.add_scalar('test/rouge2-F', rouges['rouge_2_f_score'], step)
                 self.tensorboard_writer.add_scalar('test/rougeL-F', rouges['rouge_l_f_score'], step)
+
+        return summary
+
 
     def _report_rouge(self, gold_path, can_path):
         self.logger.info("Calculating Rouge")

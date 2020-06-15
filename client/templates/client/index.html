@@ -14,8 +14,29 @@
     <div class="row">
         <div class="col-lg-6">
             {% if original_text %}
-                <h3>Original Text/URL</h3>
-                {{ original_text }}
+
+                <div class="container-contact100">
+                    <div class="wrap-contact100">
+                        <div class="contact100-form-title" style="background-image: url(/static/images/bg-01.jpg);">
+                            <span class="contact100-form-title-1">
+                                Original text
+                            </span>
+                        </div>
+
+                        <form name="inputForm" class="contact100-form validate-form" >
+
+                            <div class="wrap-input100">
+                                <textarea class="input100 long-text" name="message">
+                                    {{ original_text }}
+                                </textarea>
+                                <span class="focus-input100"></span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="dropDownSelect1"></div>
+
             {% else %}
                 {% include "client/includes/text_input_form.html" %}
             {% endif %}
@@ -26,5 +47,4 @@
         </div>
 
     </div>
-
 {% endblock %}

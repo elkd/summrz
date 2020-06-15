@@ -311,7 +311,6 @@ def test_text_abs(args, text_src, script=False):
 
     logger.info('Loading checkpoint from %s' % args.test_from)
     device = "cpu" if args.visible_gpus == '-1' else "cuda"
-    print(args.test_from)
 
     checkpoint = torch.load(args.test_from, map_location=lambda storage, loc: storage)
     opt = vars(checkpoint['opt'])
@@ -321,11 +320,10 @@ def test_text_abs(args, text_src, script=False):
 
     model = AbsSummarizer(args, device, checkpoint)
     model.eval()
-
     test_iter = data_loader.load_text(args, text_src, device, script=script)
 
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True, cache_dir=args.temp_dir)
     symbols = {'BOS': tokenizer.vocab['[unused0]'], 'EOS': tokenizer.vocab['[unused1]'],
                'PAD': tokenizer.vocab['[PAD]'], 'EOQ': tokenizer.vocab['[unused2]']}
     predictor = build_predictor(args, tokenizer, symbols, model, logger)
-    predictor.translate(test_iter, -1)
+    return predictor.translate(test_iter, -1)

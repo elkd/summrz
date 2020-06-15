@@ -35,7 +35,6 @@ class parser:
     #parser.add_argument("-sep_optim", type=str2bool, nargs='?',const=True,default=False)
     #parser.add_argument("-use_bert_emb", type=str2bool, nargs='?',const=True,default=False)
 
-
     task = 'abs'
     encode='bert' # type=str, choices=['bert', 'baseline'])
     mode='test_text' # type=str, choices=['train', 'validate', 'test', 'test_text'])
@@ -43,6 +42,8 @@ class parser:
     result_path =  f'./results/{str(datetime.datetime.now())}'
     log_file = './logs/abs/'
     visible_gpus='-1' # type=str)
+    #min_length = 
+    #max_length =
 
     bert_data_path='./bert_data_new/cnndm'
     model_path='./models/'
@@ -172,9 +173,7 @@ def summarize_page(request):
     #result_list = scoring_algorithm.scoring_main(long_text, sentence_no)
     results = test_text_abs(args, long_text)
 
-    #summary = ' '.join(result_list)
-
-    context = {'data': 'done', 'original_text': original_text}
+    context = {'data': results, 'original_text': original_text}
     return render(request, "client/index.html", context)
 
 

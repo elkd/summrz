@@ -1,13 +1,12 @@
 <div class="container-contact100">
 
-    <div class="wrap-contact100 results-cont">
+    <div class="wrap-contact100">
         <div class="contact100-form-title" style="background-image: url(/static/images/bg-01.jpg);">
             <span class="contact100-form-title-1">
                 Summary
             </span>
         </div>
     {% if data %}
-        <h3>Summary</h3>
         <p>{{ data }}</p>
         <form method="post" action="{% url 'save_summary' %}">
             {% csrf_token %}

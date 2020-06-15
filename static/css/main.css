@@ -152,7 +152,7 @@ iframe {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
+  margin: 20px;
   padding: 15px;
   background: transparent;
   position: relative;
@@ -170,6 +170,7 @@ iframe {
 
 .wrap-contact100 {
   width: 670px;
+  height: 60%;
   background: #fff;
   border-radius: 10px;
   overflow: hidden;
@@ -298,6 +299,10 @@ iframe {
   left: -105px;
   width: 80px;
 
+}
+
+.long-text {
+  height:300px;
 }
 
 /*---------------------------------------------*/

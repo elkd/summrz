@@ -347,6 +347,7 @@ def load_text(args, source_fp, device, script=False):
         if not paragraph:
             return None
         src, mask_src, segments_ids, clss, mask_cls = _process_src(paragraph)
+        print (f'src:{src}, mask_src:{mask_src}')
         segs = torch.tensor(segments_ids)[None, :].to(device)
         batch = Batch()
         batch.src  = src
@@ -354,7 +355,7 @@ def load_text(args, source_fp, device, script=False):
         batch.mask_src  = mask_src
         batch.mask_tgt  = None
         batch.segs  = segs
-        batch.src_str  =  [[sent.replace('[SEP]','').strip() for sent in paragraph.split('[CLS]')]]
+        batch.src_str  =  [[sent.replace('[SEP]','').strip() for sent in x.split('[CLS]')]]
         batch.tgt_str  = ['']
         batch.clss  = clss
         batch.mask_cls  = mask_cls

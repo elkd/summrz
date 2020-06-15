@@ -6,9 +6,9 @@ from __future__ import division
 
 import argparse
 import os
-from utils.logging import init_logger
-from train_abstractive import validate_abs, train_abs, baseline, test_abs, test_text_abs
-from train_extractive import train_ext, validate_ext, test_ext, test_text_ext
+from src.utils.logging import init_logger
+from src.train_abstractive import validate_abs, train_abs, baseline, test_abs, test_text_abs
+from src.train_extractive import train_ext, validate_ext, test_ext, test_text_ext
 
 model_flags = ['hidden_size', 'ff_size', 'heads', 'emb_size', 'enc_layers', 'enc_hidden_size', 'enc_ff_size',
                'dec_layers', 'dec_hidden_size', 'dec_ff_size', 'encoder', 'ff_actv', 'use_interval']
@@ -135,7 +135,7 @@ if __name__ == '__main__':
                 step = 0
             test_abs(args, device_id, cp, step)
         elif (args.mode == 'test_text'):
-            test_text_abs(args)
+            test_text_abs(args, args.text_src, script=True)
 
     elif (args.task == 'ext'):
         if (args.mode == 'train'):

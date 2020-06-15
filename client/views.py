@@ -13,6 +13,7 @@ from django.shortcuts import render
 from pprint import pprint
 import PyPDF2
 
+from src.utils.logging import init_logger
 from client.forms import DocumentForm
 from client.models import Summary
 from client import extraction
@@ -33,15 +34,98 @@ class parser:
     #parser.add_argument("-large", type=str2bool, nargs='?',const=True,default=False)
     #parser.add_argument("-sep_optim", type=str2bool, nargs='?',const=True,default=False)
     #parser.add_argument("-use_bert_emb", type=str2bool, nargs='?',const=True,default=False)
+
+
     task = 'abs'
-    encoder = 'bert'
-    mode = 'test_text'
-    test_from = 'abs_model.pt'
-    result_path =  f'../results/{str(datetime.datetime.now())}'
-    log_file = '../logs/abs/'
-    visible_gpus = '-1'
+    encode='bert' # type=str, choices=['bert', 'baseline'])
+    mode='test_text' # type=str, choices=['train', 'validate', 'test', 'test_text'])
+    test_from = 'base_model.pt'
+    result_path =  f'./results/{str(datetime.datetime.now())}'
+    log_file = './logs/abs/'
+    visible_gpus='-1' # type=str)
+
+    bert_data_path='./bert_data_new/cnndm'
+    model_path='./models/'
+    temp_dir='./temp'
+    text_tgt=''
+
+    batch_size=140 # type=int)
+    test_batch_size=200 # type=int)
+    max_ndocs_in_batch=6 # type=int)
+
+    max_pos=512 # type=int)
+    use_interval=True
+    large=False
+    load_from_extractive='' # type=str)
+
+    sep_optim=False
+    lr_bert=2e-3 # type=float)
+    lr_dec=2e-3 # type=float)
+    use_bert_emb=False
+
+    share_emb=False
+    finetune_bert=True
+    dec_dropout=0.2 # type=float)
+    dec_layers=6 # type=int)
+    dec_hidden_size=768 # type=int)
+    dec_heads=8 # type=int)
+    dec_ff_size=2048 # type=int)
+    enc_hidden_size=512 # type=int)
+    enc_ff_size=512 # type=int)
+    enc_dropout=0.2 # type=float)
+    enc_layers=6 # type=int)
+
+    # params for EXT
+    ext_dropout=0.2 # type=float)
+    ext_layers=2 # type=int)
+    ext_hidden_size=768 # type=int)
+    ext_heads=8 # type=int)
+    ext_ff_size=2048 # type=int)
+
+    label_smoothing=0.1 # type=float)
+    generator_shard_size=32 # type=int)
+    alpha=0.6 # type=float)
+    beam_size=5 # type=int)
+    min_length=15 # type=int)
+    max_length=150 # type=int)
+    max_tgt_len=140 # type=int)
+
+    param_init=0 # type=float)
+    param_init_glorot=True
+    optim='adam' # type=str)
+    lr=1 # type=float)
+    beta1= 0.9 # type=float)
+    beta2=0.999 # type=float)
+    warmup_steps=8000 # type=int)
+    warmup_steps_bert=8000 # type=int)
+    warmup_steps_dec=8000 # type=int)
+    max_grad_norm=0 # type=float)
+
+    save_checkpoint_steps=5 # type=int)
+    accum_count=1 # type=int)
+    report_every=1 # type=int)
+    train_steps=1000 # type=int)
+    recall_eval=False
+
+    gpu_ranks='0' # type=str)
+    seed=666 # type=int)
+
+    test_all=False
+    test_start_from=-1 # type=int)
+
+    train_from=''
+    report_rouge=True
+    block_trigram=True
 
 args = parser
+
+args.gpu_ranks = [int(i) for i in range(len(args.visible_gpus.split(',')))]
+args.world_size = len(args.gpu_ranks)
+os.environ["CUDA_VISIBLE_DEVICES"] = args.visible_gpus
+
+init_logger(args.log_file)
+device = "cpu" if args.visible_gpus == '-1' else "cuda"
+device_id = 0 if device == "cuda" else -1
 
 
 def summarize_pdf(pdf_file, sent_percentage):
@@ -72,8 +156,8 @@ def index(request):
 
 def summarize_page(request):
     url = request.GET.get('url')
-    long_text = request.GET.get('long-text')
-    sentence_no = int(request.GET.get('number'))
+    long_text = request.GET.get('message')
+    sentence_no = int(request.GET.get('phone'))
     algorithm = request.GET.get('algorithm')
     result_list = []
 
@@ -82,6 +166,8 @@ def summarize_page(request):
         original_text = url
     else:
         original_text = long_text
+        long_text = long_text.replace('\n', ' ').replace('\r', '')
+        print (long_text)
 
     #result_list = scoring_algorithm.scoring_main(long_text, sentence_no)
     results = test_text_abs(args, long_text)
@@ -89,7 +175,7 @@ def summarize_page(request):
     #summary = ' '.join(result_list)
 
     context = {'data': 'done', 'original_text': original_text}
-    return render(request, "summarizer/index.html", context)
+    return render(request, "client/index.html", context)
 
 
 @login_required

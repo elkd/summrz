@@ -182,13 +182,9 @@
         let text = document.forms["inputFormNP"]["long-text"].value;
         let regexp = new RegExp("\w");
         if (url === '' && text === '') {
-            document.getElementById("warning").innerHTML = "कम्तीमा एक स्थान भर्नुहोस् !";
+            document.getElementById("warning").innerHTML = "Please enter either URL or text";
             return false;
         }
-        {#else if (!regexp.test(text)) {#}
-        {#    document.getElementById("warning").innerHTML = "कम्तीमा एक स्थान भर्नुहोस् !";#}
-        {#    return false;#}
-        {# } #}
     }
 
 </script>

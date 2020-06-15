@@ -13,13 +13,13 @@
             {% csrf_token %}
             <div id="warning" class="text-danger"></div>
 
-            <div class="wrap-input100 validate-input" data-validate = "The text input is required">
+            <div class="wrap-input100" data-validate = "The text input is required">
                 <span class="label-input100">Enter Text</span>
                 <textarea class="input100" name="message" placeholder="Paste Long Text Here.."></textarea>
                 <span class="focus-input100"></span>
             </div>
 
-            <div class="wrap-input100 validate-input" data-validate="Name is required">
+            <div class="wrap-input100" data-validate="URL is required">
                 <span class="label-input100">Input Page URL</span>
                 <input type="url" class="input100" name="url" placeholder="Paste Complete Valid URL"/>
                 <span class="focus-input100"></span>
@@ -28,7 +28,7 @@
             <div class="d-flex" >
                 <div class="wrap-input50 validate-input" data-validate="E.g 3 or 5">
                     <span class="label-input50">Sentences #</span>
-                    <input class="input100" type="number" min="1" name="phone" value="2" placeholder="Enter phone number">
+                    <input class="input100" type="number" min="1" name="phone" value="2" placeholder="Enter Sentences number">
                 </div>
 
                 <div class="wrap-input50">

@@ -206,6 +206,7 @@ def test_abs(args, device_id, pt, step):
     logger.info('Loading checkpoint from %s' % test_from)
 
     checkpoint = torch.load(test_from, map_location=lambda storage, loc: storage)
+    print(checkpoint)
     opt = vars(checkpoint['opt'])
     for k in opt.keys():
         if (k in model_flags):
@@ -306,10 +307,11 @@ def train_abs_single(args, device_id):
     trainer.train(train_iter_fct, args.train_steps)
 
 
-def test_text_abs(args, text_src):
+def test_text_abs(args, text_src, script=False):
 
     logger.info('Loading checkpoint from %s' % args.test_from)
     device = "cpu" if args.visible_gpus == '-1' else "cuda"
+    print(args.test_from)
 
     checkpoint = torch.load(args.test_from, map_location=lambda storage, loc: storage)
     opt = vars(checkpoint['opt'])
@@ -320,7 +322,7 @@ def test_text_abs(args, text_src):
     model = AbsSummarizer(args, device, checkpoint)
     model.eval()
 
-    test_iter = data_loader.load_text(args, text_src, device)
+    test_iter = data_loader.load_text(args, text_src, device, script=script)
 
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True, cache_dir=args.temp_dir)
     symbols = {'BOS': tokenizer.vocab['[unused0]'], 'EOS': tokenizer.vocab['[unused1]'],

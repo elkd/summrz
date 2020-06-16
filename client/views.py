@@ -10,8 +10,9 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-from pprint import pprint
 import PyPDF2
+from pprint import pprint
+from gensim.summarization import summarize
 
 from src.utils.logging import init_logger
 from client.forms import DocumentForm
@@ -159,19 +160,21 @@ def summarize_page(request):
     url = request.GET.get('url')
     long_text = request.GET.get('message')
     sentence_no = int(request.GET.get('phone'))
-    algorithm = request.GET.get('algorithm')
+    algorithm = str(request.GET.get('algorithm'))
     result_list = []
 
     if url:
-        long_text = extraction.extract(url)  # text extraction using BS
-        original_text = url
-    else:
-        original_text = long_text
-        long_text = long_text.replace('\n', ' ').replace('\r', '')
-        print (long_text)
+        long_text  = extraction.extract(url)  # text extraction using BS
 
-    #result_list = scoring_algorithm.scoring_main(long_text, sentence_no)
-    results = test_text_abs(args, long_text)
+    if algorithm is '2':
+        results = summarize(long_text, ratio=0.5)
+    else:
+        long_text = long_text.replace('\n', ' ').replace('\r', '')
+        if sentence_no is 2:
+            results = test_text_abs(args, long_text)
+        else:
+            args.max_length = sentence_no
+            results = test_text_abs(args, long_text)
 
     context = {'data': results, 'original_text': original_text}
     return render(request, "client/index.html", context)

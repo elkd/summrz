@@ -1,17 +1,5 @@
 # coding=utf-8
-# Copyright 2018 The Google AI Language Team Authors and The HugginFace Inc. team.
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 """Tokenization classes."""
 
 from __future__ import absolute_import, division, print_function, unicode_literals
@@ -103,6 +91,7 @@ class BertTokenizer(object):
             subtokens = self.wordpiece_tokenizer.tokenize(token)
             for sub_token in subtokens:
                 split_tokens.append(sub_token)
+        print(split_tokens)
         return split_tokens
 
     def convert_tokens_to_ids(self, tokens):
@@ -152,8 +141,8 @@ class BertTokenizer(object):
         if resolved_vocab_file == vocab_file:
             logger.info("loading vocabulary file {}".format(vocab_file))
         else:
-            logger.info("loading vocabulary file {} from cache at {}".format(
-                vocab_file, resolved_vocab_file))
+            logger.info("loading vocabulary file from cache at {}".format(
+                resolved_vocab_file))
         if pretrained_model_name_or_path in PRETRAINED_VOCAB_POSITIONAL_EMBEDDINGS_SIZE_MAP:
             # if we're using a pretrained model, ensure the tokenizer wont index sequences longer
             # than the number of positional embeddings
